@@ -6,16 +6,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LanguageToggle } from "@/components/i18n/language-toggle";
+import { useT } from "@/components/i18n/language-provider";
 import { cn } from "@/lib/utils";
 
-const featureDropdown = [
-  { label: "Patient Management", href: "#features" },
-  { label: "Appointments", href: "#features" },
-  { label: "Billing & Payments", href: "#features" },
-  { label: "Analytics", href: "#features" },
-];
-
 export function Navbar() {
+  const t = useT();
+  const featureDropdown = [
+    { label: t("navbar.featureDropdown.patientManagement"), href: "#features" },
+    { label: t("navbar.featureDropdown.appointments"), href: "#features" },
+    { label: t("navbar.featureDropdown.billing"), href: "#features" },
+    { label: t("navbar.featureDropdown.analytics"), href: "#features" },
+  ];
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -86,7 +88,7 @@ export function Navbar() {
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors rounded-lg hover:bg-surface-secondary"
             >
-              Features
+              {t("navbar.features")}
               <ChevronDown className={cn(
                 "h-3.5 w-3.5 transition-transform duration-200",
                 dropdownOpen && "rotate-180"
@@ -120,34 +122,38 @@ export function Navbar() {
             href="#demo"
             className="px-3 py-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors rounded-lg hover:bg-surface-secondary"
           >
-            Demo
+            {t("navbar.demo")}
           </a>
           <a
             href="#pricing"
             className="px-3 py-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors rounded-lg hover:bg-surface-secondary"
           >
-            Pricing
+            {t("navbar.pricing")}
           </a>
         </div>
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
+          <LanguageToggle />
           <Button variant="ghost" size="sm" onClick={() => router.push("/login")}>
-            Log in
+            {t("common.login")}
           </Button>
           <Button variant="primary" size="sm" onClick={() => router.push("/register")}>
-            Get Started
+            {t("common.getStarted")}
           </Button>
         </div>
 
-        {/* Mobile hamburger */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden flex items-center justify-center h-10 w-10 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-secondary transition-colors"
-          aria-label="Toggle menu"
-        >
-          {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        {/* Mobile controls */}
+        <div className="md:hidden flex items-center gap-2">
+          <LanguageToggle />
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex items-center justify-center h-10 w-10 rounded-lg text-text-secondary hover:text-text-primary hover:bg-surface-secondary transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile menu */}
@@ -162,9 +168,9 @@ export function Navbar() {
           >
             <div ref={mobileMenuRef} className="px-4 py-5 space-y-1">
               {[
-                { label: "Features", href: "#features" },
-                { label: "Demo", href: "#demo" },
-                { label: "Pricing", href: "#pricing" },
+                { label: t("navbar.features"), href: "#features" },
+                { label: t("navbar.demo"), href: "#demo" },
+                { label: t("navbar.pricing"), href: "#pricing" },
               ].map((link) => (
                 <a
                   key={link.href}
@@ -178,10 +184,10 @@ export function Navbar() {
 
               <div className="flex flex-col gap-2 pt-4 mt-2 border-t border-border/50">
                 <Button variant="ghost" size="md" className="w-full justify-center" onClick={() => router.push("/login")}>
-                  Log in
+                  {t("common.login")}
                 </Button>
                 <Button variant="primary" size="md" className="w-full justify-center" onClick={() => router.push("/register")}>
-                  Get Started Free
+                  {t("common.getStartedFree")}
                 </Button>
               </div>
             </div>

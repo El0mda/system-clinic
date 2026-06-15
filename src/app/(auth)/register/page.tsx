@@ -7,17 +7,19 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/components/dashboard/auth-provider";
+import { useT } from "@/components/i18n/language-provider";
 
 const clinicTypes = [
-  { value: "dental", label: "Dental Clinic", icon: "🦷" },
-  { value: "beauty", label: "Beauty Center", icon: "💅" },
-  { value: "physio", label: "Physiotherapy", icon: "🏃" },
-  { value: "general", label: "General Clinic", icon: "🏥" },
+  { value: "dental", labelKey: "auth.clinicTypes.dental", icon: "🦷" },
+  { value: "beauty", labelKey: "auth.clinicTypes.beauty", icon: "💅" },
+  { value: "physio", labelKey: "auth.clinicTypes.physio", icon: "🏃" },
+  { value: "general", labelKey: "auth.clinicTypes.general", icon: "🏥" },
 ];
 
 export default function RegisterPage() {
   const router = useRouter();
   const { register } = useAuth();
+  const t = useT();
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
@@ -81,53 +83,53 @@ export default function RegisterPage() {
         <form onSubmit={handleRegister}>
           {step === 1 && (
             <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-              <h2 className="text-xl font-semibold text-text-primary text-center">Create your account</h2>
-              <p className="text-sm text-text-secondary text-center mb-6">Set up your clinic in minutes</p>
+              <h2 className="text-xl font-semibold text-text-primary text-center">{t("auth.createAccount")}</h2>
+              <p className="text-sm text-text-secondary text-center mb-6">{t("auth.setupMinutes")}</p>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-sm font-medium text-text-primary mb-1.5">First name</label>
+                  <label className="block text-sm font-medium text-text-primary mb-1.5">{t("auth.firstName")}</label>
                   <input value={form.firstName} onChange={(e) => update("firstName", e.target.value)} placeholder="John" required className="w-full h-11 px-4 rounded-xl border border-border/60 bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-text-primary mb-1.5">Last name</label>
+                  <label className="block text-sm font-medium text-text-primary mb-1.5">{t("auth.lastName")}</label>
                   <input value={form.lastName} onChange={(e) => update("lastName", e.target.value)} placeholder="Doe" required className="w-full h-11 px-4 rounded-xl border border-border/60 bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all" />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-text-primary mb-1.5">Email</label>
-                <input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} placeholder="you@clinic.com" required className="w-full h-11 px-4 rounded-xl border border-border/60 bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all" />
+                <label className="block text-sm font-medium text-text-primary mb-1.5">{t("auth.email")}</label>
+                <input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} placeholder={t("auth.emailPlaceholder")} required className="w-full h-11 px-4 rounded-xl border border-border/60 bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-text-primary mb-1.5">Phone</label>
+                <label className="block text-sm font-medium text-text-primary mb-1.5">{t("auth.phone")}</label>
                 <input type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} placeholder="+1 (555) 000-0000" required className="w-full h-11 px-4 rounded-xl border border-border/60 bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-text-primary mb-1.5">Password</label>
-                <input type="password" value={form.password} onChange={(e) => update("password", e.target.value)} placeholder="Min. 8 characters" required minLength={8} className="w-full h-11 px-4 rounded-xl border border-border/60 bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all" />
+                <label className="block text-sm font-medium text-text-primary mb-1.5">{t("auth.password")}</label>
+                <input type="password" value={form.password} onChange={(e) => update("password", e.target.value)} placeholder={t("auth.passwordMin")} required minLength={8} className="w-full h-11 px-4 rounded-xl border border-border/60 bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all" />
               </div>
 
               <Button type="button" variant="primary" size="lg" className="w-full mt-2" onClick={() => setStep(2)}>
-                Continue <ArrowRight className="h-4 w-4" />
+                {t("common.continue")} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Button>
             </motion.div>
           )}
 
           {step === 2 && (
             <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-              <h2 className="text-xl font-semibold text-text-primary text-center">Clinic details</h2>
-              <p className="text-sm text-text-secondary text-center mb-6">Tell us about your practice</p>
+              <h2 className="text-xl font-semibold text-text-primary text-center">{t("auth.clinicDetails")}</h2>
+              <p className="text-sm text-text-secondary text-center mb-6">{t("auth.tellUsAboutPractice")}</p>
 
               <div>
-                <label className="block text-sm font-medium text-text-primary mb-1.5">Clinic name</label>
+                <label className="block text-sm font-medium text-text-primary mb-1.5">{t("auth.clinicName")}</label>
                 <input value={form.clinicName} onChange={(e) => update("clinicName", e.target.value)} placeholder="BrightSmile Dental" required className="w-full h-11 px-4 rounded-xl border border-border/60 bg-surface text-sm focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all" />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-text-primary mb-3">Clinic type</label>
+                <label className="block text-sm font-medium text-text-primary mb-3">{t("auth.clinicType")}</label>
                 <div className="grid grid-cols-2 gap-3">
                   {clinicTypes.map((ct) => (
                     <button
@@ -141,7 +143,7 @@ export default function RegisterPage() {
                       }`}
                     >
                       <span className="text-xl">{ct.icon}</span>
-                      {ct.label}
+                      {t(ct.labelKey)}
                     </button>
                   ))}
                 </div>
@@ -149,17 +151,17 @@ export default function RegisterPage() {
 
               <div className="flex gap-3 pt-2">
                 <Button type="button" variant="outline" size="lg" className="flex-1" onClick={() => setStep(1)}>
-                  Back
+                  {t("common.back")}
                 </Button>
                 <Button type="submit" variant="primary" size="lg" className="flex-1" disabled={loading}>
                   {loading ? (
                     <span className="flex items-center gap-2">
                       <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      Creating...
+                      {t("auth.creating")}
                     </span>
                   ) : (
                     <span className="flex items-center gap-2">
-                      Create account <ArrowRight className="h-4 w-4" />
+                      {t("auth.createAccountBtn")} <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                     </span>
                   )}
                 </Button>
@@ -170,9 +172,9 @@ export default function RegisterPage() {
 
         <div className="mt-6 text-center">
           <p className="text-xs text-text-tertiary">
-            Already have an account?{" "}
+            {t("auth.haveAccount")}{" "}
             <Link href="/login" className="text-primary-600 font-medium hover:text-primary-700">
-              Sign in
+              {t("auth.signIn")}
             </Link>
           </p>
         </div>

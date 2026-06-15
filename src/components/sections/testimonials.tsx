@@ -7,58 +7,20 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
+import { useT } from "@/components/i18n/language-provider";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const testimonials = [
-  {
-    name: "Dr. Sarah Mitchell",
-    role: "Dental Clinic Owner",
-    avatar: "SM",
-    content:
-      "HealthERP transformed how we run our practice. Patient management used to take hours — now it's minutes. The scheduling alone saved us 15 hours per week.",
-    rating: 5,
-    gradient: "from-primary-500 to-indigo-500",
-  },
-  {
-    name: "James Rodriguez",
-    role: "Physiotherapy Center Director",
-    avatar: "JR",
-    content:
-      "The multi-branch support is incredible. We can manage all 4 locations from a single dashboard. The analytics helped us identify a 23% revenue growth opportunity.",
-    rating: 5,
-    gradient: "from-emerald-500 to-teal-500",
-  },
-  {
-    name: "Dr. Lisa Chen",
-    role: "Beauty & Wellness Studio",
-    avatar: "LC",
-    content:
-      "Finally, an ERP that understands healthcare workflows. The inventory management alone paid for itself in the first month. Highly recommend for any clinic.",
-    rating: 5,
-    gradient: "from-amber-500 to-orange-500",
-  },
-  {
-    name: "Dr. Michael Park",
-    role: "General Medical Practice",
-    avatar: "MP",
-    content:
-      "We evaluated 12 different platforms before choosing HealthERP. The integration capabilities and the support team are unmatched. A game-changer for our clinic.",
-    rating: 5,
-    gradient: "from-violet-500 to-purple-500",
-  },
-  {
-    name: "Anna Williams",
-    role: "Multi-Clinic Operations Manager",
-    avatar: "AW",
-    content:
-      "Managing 7 clinics across the city was a nightmare until HealthERP. Now I have real-time visibility into every location. The reporting is phenomenal.",
-    rating: 5,
-    gradient: "from-rose-500 to-pink-500",
-  },
+  { name: "Dr. Sarah Mitchell", key: "t1", avatar: "SM", rating: 5, gradient: "from-primary-500 to-indigo-500" },
+  { name: "James Rodriguez", key: "t2", avatar: "JR", rating: 5, gradient: "from-emerald-500 to-teal-500" },
+  { name: "Dr. Lisa Chen", key: "t3", avatar: "LC", rating: 5, gradient: "from-amber-500 to-orange-500" },
+  { name: "Dr. Michael Park", key: "t4", avatar: "MP", rating: 5, gradient: "from-violet-500 to-purple-500" },
+  { name: "Anna Williams", key: "t5", avatar: "AW", rating: 5, gradient: "from-rose-500 to-pink-500" },
 ];
 
 export function Testimonials() {
+  const t = useT();
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -133,9 +95,9 @@ export function Testimonials() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          badge="Testimonials"
-          title="Loved by healthcare professionals"
-          description="Hear from clinic owners and practitioners who transformed their operations with HealthERP."
+          badge={t("testimonials.badge")}
+          title={t("testimonials.title")}
+          description={t("testimonials.description")}
         />
 
         <div className="mt-12 sm:mt-16 max-w-3xl mx-auto testimonial-card">
@@ -175,7 +137,7 @@ export function Testimonials() {
                     </div>
 
                     <blockquote ref={quoteRef} className="text-lg sm:text-xl lg:text-2xl text-text-primary font-medium leading-relaxed mb-8 px-4">
-                      &ldquo;{testimonials[current].content}&rdquo;
+                      &ldquo;{t(`testimonials.items.${testimonials[current].key}.content`)}&rdquo;
                     </blockquote>
 
                     {/* Avatar + info */}
@@ -194,7 +156,7 @@ export function Testimonials() {
                           {testimonials[current].name}
                         </p>
                         <p className="text-xs text-text-tertiary">
-                          {testimonials[current].role}
+                          {t(`testimonials.items.${testimonials[current].key}.role`)}
                         </p>
                       </div>
                     </div>

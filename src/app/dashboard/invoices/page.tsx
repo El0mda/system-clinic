@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { invoices as initialInvoices, patients } from "@/lib/dashboard-data";
 import type { Invoice } from "@/lib/dashboard-data";
+import { useT } from "@/components/i18n/language-provider";
 
 type StatusFilter = "All" | "Paid" | "Partially Paid" | "Overdue" | "Pending" | "Cancelled";
 
 export default function InvoicesPage() {
+  const t = useT();
   const [invoices, setInvoices] = useState<Invoice[]>(initialInvoices);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
@@ -52,55 +54,55 @@ export default function InvoicesPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-semibold text-text-primary">Invoices</h1>
-          <p className="text-sm text-text-secondary mt-1">{invoices.length} total invoices</p>
+          <h1 className="text-2xl sm:text-3xl font-semibold text-text-primary">{t("invoices.title")}</h1>
+          <p className="text-sm text-text-secondary mt-1">{invoices.length} {t("invoices.totalInvoices")}</p>
         </div>
         <Button variant="primary" size="md" onClick={() => setModalOpen(true)}>
-          <Plus className="h-4 w-4" /> Create Invoice
+          <Plus className="h-4 w-4" /> {t("invoices.createInvoice")}
         </Button>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
         <div className="rounded-xl border border-border/40 bg-surface p-4">
-          <p className="text-xs text-text-tertiary font-medium">Total Revenue</p>
+          <p className="text-xs text-text-tertiary font-medium">{t("invoices.totalRevenue")}</p>
           <p className="text-xl font-semibold text-text-primary mt-1">${totalRevenue.toLocaleString()}</p>
         </div>
         <div className="rounded-xl border border-border/40 bg-surface p-4">
-          <p className="text-xs text-text-tertiary font-medium">Collected</p>
+          <p className="text-xs text-text-tertiary font-medium">{t("invoices.collected")}</p>
           <p className="text-xl font-semibold text-emerald-600 mt-1">${totalCollected.toLocaleString()}</p>
         </div>
         <div className="rounded-xl border border-border/40 bg-surface p-4">
-          <p className="text-xs text-text-tertiary font-medium">Outstanding</p>
+          <p className="text-xs text-text-tertiary font-medium">{t("invoices.outstanding")}</p>
           <p className="text-xl font-semibold text-amber-600 mt-1">${totalDue.toLocaleString()}</p>
         </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-text-tertiary" />
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search invoices..."
-            className="w-full h-11 pl-10 pr-4 rounded-xl border border-border/60 bg-surface text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all" />
+          <Search className="absolute left-3.5 rtl:left-auto rtl:right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-text-tertiary" />
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder={t("invoices.searchPlaceholder")}
+            className="w-full h-11 pl-10 pr-4 rtl:pl-4 rtl:pr-10 rounded-xl border border-border/60 bg-surface text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all" />
         </div>
         <div className="relative">
           <Button variant="outline" size="md" onClick={() => setShowFilters(!showFilters)}>
-            <Filter className="h-4 w-4" /> Filters {filterBadge && <span className="ml-1 w-2 h-2 rounded-full bg-primary-500" />}
+            <Filter className="h-4 w-4" /> {t("common.filters")} {filterBadge && <span className="mx-1 w-2 h-2 rounded-full bg-primary-500" />}
           </Button>
           {showFilters && (
-            <div className="absolute right-0 top-full mt-2 z-50 w-56 rounded-xl border border-border/40 bg-surface shadow-xl p-4 space-y-3">
-              <p className="text-xs font-medium text-text-tertiary mb-2">Status</p>
+            <div className="absolute right-0 rtl:right-auto rtl:left-0 top-full mt-2 z-50 w-56 rounded-xl border border-border/40 bg-surface shadow-xl p-4 space-y-3">
+              <p className="text-xs font-medium text-text-tertiary mb-2">{t("common.status")}</p>
               <div className="flex flex-wrap gap-1.5">
                 {(["All", "Paid", "Partially Paid", "Overdue", "Pending", "Cancelled"] as StatusFilter[]).map((s) => (
                   <button key={s} onClick={() => setStatusFilter(s)}
-                    className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${statusFilter === s ? "bg-primary-50 text-primary-700 dark:bg-primary-900/20 dark:text-primary-300" : "text-text-secondary hover:text-text-primary hover:bg-surface-secondary"}`}>{s}</button>
+                    className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${statusFilter === s ? "bg-primary-50 text-primary-700 dark:bg-primary-900/20 dark:text-primary-300" : "text-text-secondary hover:text-text-primary hover:bg-surface-secondary"}`}>{s === "All" ? t("common.all") : t(`enums.status.${s}`, s)}</button>
                 ))}
               </div>
               {statusFilter !== "All" && (
-                <button onClick={() => setStatusFilter("All")} className="block text-xs font-medium text-primary-600 hover:text-primary-700 mt-2">Clear filters</button>
+                <button onClick={() => setStatusFilter("All")} className="block text-xs font-medium text-primary-600 hover:text-primary-700 mt-2">{t("common.clearFilters")}</button>
               )}
             </div>
           )}
         </div>
-        <Button variant="outline" size="md"><Download className="h-4 w-4" /> Export</Button>
+        <Button variant="outline" size="md"><Download className="h-4 w-4" /> {t("common.export")}</Button>
       </div>
 
       <div className="rounded-xl border border-border/40 bg-surface overflow-hidden">
@@ -108,13 +110,13 @@ export default function InvoicesPage() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-border/30 bg-surface-secondary/50 dark:bg-surface-tertiary/30">
-                <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">Invoice</th>
-                <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">Patient</th>
-                <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">Date</th>
-                <th className="text-right text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">Amount</th>
-                <th className="text-right text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">Paid</th>
-                <th className="text-right text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">Due</th>
-                <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">Status</th>
+                <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("invoices.cols.invoice")}</th>
+                <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("invoices.cols.patient")}</th>
+                <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("invoices.cols.date")}</th>
+                <th className="text-right text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("invoices.cols.amount")}</th>
+                <th className="text-right text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("invoices.cols.paid")}</th>
+                <th className="text-right text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("invoices.cols.due")}</th>
+                <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("invoices.cols.status")}</th>
                 <th className="text-right text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3"></th>
               </tr>
             </thead>
@@ -139,7 +141,7 @@ export default function InvoicesPage() {
                       inv.status === "Overdue" ? "bg-red-50 text-red-700 dark:bg-red-900/20 dark:text-red-400" :
                       inv.status === "Cancelled" ? "bg-slate-50 text-slate-500 dark:bg-slate-900/20 dark:text-slate-400" :
                       "bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400"
-                    }`}>{inv.status}</span>
+                    }`}>{t(`enums.status.${inv.status}`, inv.status)}</span>
                   </td>
                   <td className="px-4 py-3.5 text-right">
                     <button className="h-8 w-8 rounded-lg text-text-tertiary hover:text-text-primary hover:bg-surface-secondary dark:hover:bg-surface-tertiary/50 transition-colors flex items-center justify-center">
@@ -153,25 +155,25 @@ export default function InvoicesPage() {
         </div>
       </div>
 
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Create Invoice">
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={t("invoices.createInvoice")}>
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-text-secondary mb-1.5">Patient</label>
+            <label className="block text-xs font-medium text-text-secondary mb-1.5">{t("invoices.patient")}</label>
             <select value={form.patientName} onChange={(e) => setForm({ ...form, patientName: e.target.value })}
               className="w-full h-10 px-3 rounded-lg border border-border/60 bg-surface-secondary/50 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all appearance-none">
-              <option value="">Select patient</option>
+              <option value="">{t("invoices.selectPatient")}</option>
               {patients.map((p) => <option key={p.id} value={p.name}>{p.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-text-secondary mb-1.5">Amount ($)</label>
+            <label className="block text-xs font-medium text-text-secondary mb-1.5">{t("invoices.amount")}</label>
             <input type="number" value={form.amount} onChange={(e) => setForm({ ...form, amount: e.target.value })}
               placeholder="0.00"
               className="w-full h-10 px-3 rounded-lg border border-border/60 bg-surface-secondary/50 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all" />
           </div>
           <div className="flex justify-end gap-3 pt-2">
-            <Button variant="outline" size="md" onClick={() => setModalOpen(false)}>Cancel</Button>
-            <Button variant="primary" size="md" onClick={handleAdd} disabled={!form.patientName || !form.amount}>Create Invoice</Button>
+            <Button variant="outline" size="md" onClick={() => setModalOpen(false)}>{t("common.cancel")}</Button>
+            <Button variant="primary" size="md" onClick={handleAdd} disabled={!form.patientName || !form.amount}>{t("invoices.createInvoice")}</Button>
           </div>
         </div>
       </Modal>

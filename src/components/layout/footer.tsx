@@ -1,27 +1,16 @@
 "use client";
 
 import { Heart } from "lucide-react";
-
-const footerLinks = [
-  {
-    title: "Product",
-    links: ["Features", "Pricing", "Demo", "Integrations", "Changelog"],
-  },
-  {
-    title: "Company",
-    links: ["About", "Blog", "Careers", "Press", "Partners"],
-  },
-  {
-    title: "Resources",
-    links: ["Documentation", "Help Center", "API Reference", "Community", "Status"],
-  },
-  {
-    title: "Legal",
-    links: ["Privacy", "Terms", "Security", "Cookies"],
-  },
-];
+import { useLanguage } from "@/components/i18n/language-provider";
 
 export function Footer() {
+  const { t, tArr } = useLanguage();
+  const footerLinks = [
+    { title: t("footer.groups.product.title"), links: tArr("footer.groups.product.links") },
+    { title: t("footer.groups.company.title"), links: tArr("footer.groups.company.links") },
+    { title: t("footer.groups.resources.title"), links: tArr("footer.groups.resources.links") },
+    { title: t("footer.groups.legal.title"), links: tArr("footer.groups.legal.links") },
+  ];
   return (
     <footer className="border-t border-border/50 bg-surface-secondary/50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 lg:py-20">
@@ -36,7 +25,7 @@ export function Footer() {
               </span>
             </a>
             <p className="text-sm text-text-secondary leading-relaxed max-w-xs">
-              The all-in-one ERP platform for modern healthcare clinics.
+              {t("footer.tagline")}
             </p>
           </div>
 
@@ -63,10 +52,10 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-text-tertiary">
-            &copy; {new Date().getFullYear()} HealthERP. All rights reserved.
+            &copy; {new Date().getFullYear()} HealthERP. {t("footer.rights")}
           </p>
           <p className="text-xs text-text-tertiary flex items-center gap-1">
-            Made with <Heart className="h-3 w-3 text-red-500 fill-red-500" /> for healthcare
+            {t("footer.madeWith")} <Heart className="h-3 w-3 text-red-500 fill-red-500" /> {t("footer.forHealthcare")}
           </p>
         </div>
       </div>

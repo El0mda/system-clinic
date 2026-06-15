@@ -8,64 +8,19 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Check, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/ui/section-header";
+import { useLanguage } from "@/components/i18n/language-provider";
 import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const plans = [
-  {
-    name: "Starter",
-    description: "Perfect for small clinics getting started.",
-    monthlyPrice: 29,
-    yearlyPrice: 290,
-    features: [
-      "Up to 500 patients",
-      "Basic scheduling",
-      "Email reminders",
-      "Single branch",
-      "Standard reports",
-      "Email support",
-    ],
-    highlighted: false,
-  },
-  {
-    name: "Professional",
-    description: "Ideal for growing practices with multiple staff.",
-    monthlyPrice: 79,
-    yearlyPrice: 790,
-    features: [
-      "Unlimited patients",
-      "Advanced scheduling",
-      "SMS & email reminders",
-      "Up to 5 branches",
-      "Advanced analytics",
-      "Billing & payments",
-      "Inventory management",
-      "Priority support",
-    ],
-    highlighted: true,
-  },
-  {
-    name: "Enterprise",
-    description: "For large healthcare organizations.",
-    monthlyPrice: 199,
-    yearlyPrice: 1990,
-    features: [
-      "Everything in Professional",
-      "Unlimited branches",
-      "Custom integrations",
-      "API access",
-      "Dedicated account manager",
-      "Custom reporting",
-      "SLA guarantee",
-      "24/7 phone support",
-      "On-premise option",
-    ],
-    highlighted: false,
-  },
+  { key: "starter", monthlyPrice: 29, yearlyPrice: 290, highlighted: false },
+  { key: "professional", monthlyPrice: 79, yearlyPrice: 790, highlighted: true },
+  { key: "enterprise", monthlyPrice: 199, yearlyPrice: 1990, highlighted: false },
 ];
 
 export function Pricing() {
+  const { t } = useLanguage();
   const [isYearly, setIsYearly] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -122,9 +77,9 @@ export function Pricing() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          badge="Pricing"
-          title="Simple, transparent pricing"
-          description="No hidden fees. No surprises. Choose the plan that fits your clinic's needs."
+          badge={t("pricing.badge")}
+          title={t("pricing.title")}
+          description={t("pricing.description")}
         />
 
         {/* Toggle */}
@@ -145,7 +100,7 @@ export function Pricing() {
                   : "text-text-secondary hover:text-text-primary"
               )}
             >
-              Monthly
+              {t("pricing.monthly")}
             </button>
             <button
               onClick={() => setIsYearly(true)}
@@ -156,8 +111,8 @@ export function Pricing() {
                   : "text-text-secondary hover:text-text-primary"
               )}
             >
-              Annually
-              <span className="ml-1.5 text-xs text-emerald-600 font-semibold">Save 20%</span>
+              {t("pricing.annually")}
+              <span className="mx-1.5 text-xs text-emerald-600 font-semibold">{t("pricing.save20")}</span>
             </button>
           </div>
         </motion.div>
@@ -166,7 +121,7 @@ export function Pricing() {
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
           {plans.map((plan, index) => (
             <PricingCard
-              key={plan.name}
+              key={plan.key}
               plan={plan}
               isYearly={isYearly}
               ref={(el) => { cardsRef.current[index] = el; }}
@@ -184,6 +139,10 @@ interface PricingCardProps {
 }
 
 const PricingCard = forwardRef<HTMLDivElement, PricingCardProps>(function PricingCard({ plan, isYearly }, forwardedRef) {
+  const { t, tArr } = useLanguage();
+  const name = t(`pricing.plans.${plan.key}.name`);
+  const description = t(`pricing.plans.${plan.key}.description`);
+  const features = tArr(`pricing.plans.${plan.key}.features`);
   const cardRef = useRef<HTMLDivElement>(null);
 
   // Merge refs
@@ -254,7 +213,7 @@ const PricingCard = forwardRef<HTMLDivElement, PricingCardProps>(function Pricin
       {plan.highlighted && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
           <span className="inline-flex items-center rounded-full bg-white/20 backdrop-blur-sm px-3.5 py-1 text-xs font-medium text-white border border-white/20">
-            Most Popular
+            {t("pricing.mostPopular")}
           </span>
         </div>
       )}
@@ -264,13 +223,13 @@ const PricingCard = forwardRef<HTMLDivElement, PricingCardProps>(function Pricin
           "text-lg font-semibold mb-1",
           plan.highlighted ? "text-white" : "text-text-primary"
         )}>
-          {plan.name}
+          {name}
         </h3>
         <p className={cn(
           "text-sm",
           plan.highlighted ? "text-primary-100" : "text-text-secondary"
         )}>
-          {plan.description}
+          {description}
         </p>
       </div>
 
@@ -286,7 +245,7 @@ const PricingCard = forwardRef<HTMLDivElement, PricingCardProps>(function Pricin
             "text-sm font-medium",
             plan.highlighted ? "text-primary-200" : "text-text-tertiary"
           )}>
-            /{isYearly ? "year" : "month"}
+            /{isYearly ? t("pricing.perYear") : t("pricing.perMonth")}
           </span>
         </div>
       </div>
@@ -300,13 +259,13 @@ const PricingCard = forwardRef<HTMLDivElement, PricingCardProps>(function Pricin
             plan.highlighted && "bg-white text-primary-700 hover:bg-primary-50 shadow-lg"
           )}
         >
-          Get Started
-          <ArrowRight className="h-4 w-4" />
+          {t("common.getStarted")}
+          <ArrowRight className="h-4 w-4 rtl:rotate-180" />
         </Button>
       </div>
 
       <ul className="space-y-3 flex-1" style={{ transform: "translateZ(15px)" }}>
-        {plan.features.map((feature) => (
+        {features.map((feature) => (
           <li key={feature} className="flex items-start gap-3">
             <Check className={cn(
               "w-4 h-4 mt-0.5 flex-shrink-0",

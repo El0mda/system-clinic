@@ -11,20 +11,15 @@ import {
 } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { AnimatedNumber } from "@/components/ui/animated-number";
-
-const tabs = [
-  { id: "overview", label: "Overview" },
-  { id: "appointments", label: "Schedule" },
-  { id: "revenue", label: "Revenue" },
-];
+import { useT } from "@/components/i18n/language-provider";
 
 const tabContent = {
   overview: {
     kpis: [
-      { label: "Total Patients", value: 2847, prefix: "", suffix: "", change: "+12.5%", icon: Activity },
-      { label: "Monthly Revenue", value: 48200, prefix: "$", suffix: "", change: "+23.1%", icon: DollarSign },
-      { label: "Appointments", value: 1156, prefix: "", suffix: "", change: "+8.3%", icon: Calendar },
-      { label: "Growth Rate", value: 94, prefix: "", suffix: "%", change: "+5.2%", icon: TrendingUp },
+      { label: "totalPatients", value: 2847, prefix: "", suffix: "", change: "+12.5%", icon: Activity },
+      { label: "monthlyRevenue", value: 48200, prefix: "$", suffix: "", change: "+23.1%", icon: DollarSign },
+      { label: "appointments", value: 1156, prefix: "", suffix: "", change: "+8.3%", icon: Calendar },
+      { label: "growthRate", value: 94, prefix: "", suffix: "%", change: "+5.2%", icon: TrendingUp },
     ],
   },
   appointments: {
@@ -49,7 +44,13 @@ const tabContent = {
 };
 
 export function LiveDemo() {
+  const t = useT();
   const [activeTab, setActiveTab] = useState("overview");
+  const tabs = [
+    { id: "overview", label: t("liveDemo.tabs.overview") },
+    { id: "appointments", label: t("liveDemo.tabs.appointments") },
+    { id: "revenue", label: t("liveDemo.tabs.revenue") },
+  ];
 
   return (
     <section id="demo" className="relative py-20 sm:py-28 lg:py-32 overflow-hidden">
@@ -57,9 +58,9 @@ export function LiveDemo() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          badge="Live Demo"
-          title="See it in action"
-          description="Explore the dashboard interface with real-time data visualization and intuitive controls."
+          badge={t("liveDemo.badge")}
+          title={t("liveDemo.title")}
+          description={t("liveDemo.description")}
         />
 
         <motion.div
@@ -132,7 +133,7 @@ export function LiveDemo() {
                           >
                             <div className="flex items-center justify-between mb-3">
                               <span className="text-xs sm:text-sm text-text-tertiary font-medium">
-                                {kpi.label}
+                                {t(`liveDemo.kpis.${kpi.label}`)}
                               </span>
                               <div className="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center">
                                 <Icon className="w-4 h-4 text-primary-600" />
@@ -150,7 +151,7 @@ export function LiveDemo() {
                               <span className="text-xs font-medium text-emerald-600">
                                 {kpi.change}
                               </span>
-                              <span className="text-xs text-text-tertiary">vs last month</span>
+                              <span className="text-xs text-text-tertiary">{t("liveDemo.vsLastMonth")}</span>
                             </div>
                           </div>
                         );
@@ -172,19 +173,19 @@ export function LiveDemo() {
                         <thead>
                           <tr className="border-b border-border/40">
                             <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider pb-3 pr-4">
-                              Patient
+                              {t("liveDemo.cols.patient")}
                             </th>
                             <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider pb-3 pr-4">
-                              Time
+                              {t("liveDemo.cols.time")}
                             </th>
                             <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider pb-3 pr-4">
-                              Doctor
+                              {t("liveDemo.cols.doctor")}
                             </th>
                             <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider pb-3 pr-4">
-                              Type
+                              {t("liveDemo.cols.type")}
                             </th>
                             <th className="text-right text-xs font-semibold text-text-tertiary uppercase tracking-wider pb-3">
-                              Status
+                              {t("liveDemo.cols.status")}
                             </th>
                           </tr>
                         </thead>
@@ -211,7 +212,7 @@ export function LiveDemo() {
                                   appt.status === "Confirmed" ? "bg-blue-50 text-blue-700" :
                                   "bg-amber-50 text-amber-700"
                                 }`}>
-                                  {appt.status}
+                                  {t(`enums.status.${appt.status}`, appt.status)}
                                 </span>
                               </td>
                             </tr>

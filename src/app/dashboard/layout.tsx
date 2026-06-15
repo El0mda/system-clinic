@@ -10,22 +10,24 @@ import {
   Bell, LogOut, Menu, Search,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/dashboard/theme-toggle";
+import { LanguageToggle } from "@/components/i18n/language-toggle";
+import { useT } from "@/components/i18n/language-provider";
 import { useAuth } from "@/components/dashboard/auth-provider";
 import { cn } from "@/lib/utils";
 
-const navItems = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Patients", href: "/dashboard/patients", icon: Users },
-  { label: "Appointments", href: "/dashboard/appointments", icon: Calendar },
-  { label: "Invoices", href: "/dashboard/invoices", icon: FileText },
-  { label: "Services", href: "/dashboard/services", icon: Briefcase },
-  { label: "Inventory", href: "/dashboard/inventory", icon: Package },
-  { label: "Employees", href: "/dashboard/employees", icon: UserCog },
-  { label: "Settings", href: "/dashboard/settings", icon: Settings },
-];
-
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
+  const t = useT();
+  const navItems = [
+    { label: t("nav.dashboard"), href: "/dashboard", icon: LayoutDashboard },
+    { label: t("nav.patients"), href: "/dashboard/patients", icon: Users },
+    { label: t("nav.appointments"), href: "/dashboard/appointments", icon: Calendar },
+    { label: t("nav.invoices"), href: "/dashboard/invoices", icon: FileText },
+    { label: t("nav.services"), href: "/dashboard/services", icon: Briefcase },
+    { label: t("nav.inventory"), href: "/dashboard/inventory", icon: Package },
+    { label: t("nav.employees"), href: "/dashboard/employees", icon: UserCog },
+    { label: t("nav.settings"), href: "/dashboard/settings", icon: Settings },
+  ];
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -155,7 +157,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             )}
           >
             <LogOut className="h-5 w-5 shrink-0" />
-            {!collapsed && <span>Log out</span>}
+            {!collapsed && <span>{t("common.logout")}</span>}
           </button>
         </div>
       </aside>
@@ -173,7 +175,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </button>
             <button className="hidden sm:flex items-center gap-2 w-64 lg:w-80 px-3 py-2 rounded-lg bg-surface-secondary border border-border text-sm text-text-tertiary hover:border-primary-400 hover:text-text-secondary transition-colors">
               <Search className="h-4 w-4 shrink-0" />
-              <span className="truncate">Search patients, appointments...</span>
+              <span className="truncate">{t("dashboardChrome.searchPlaceholder")}</span>
               <kbd className="ml-auto hidden lg:inline-flex items-center gap-0.5 rounded border border-border bg-surface px-1.5 py-0.5 text-[10px] font-medium text-text-tertiary">
                 ⌘K
               </kbd>
@@ -181,6 +183,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <LanguageToggle />
             <ThemeToggle />
             <button className="relative flex h-9 w-9 items-center justify-center rounded-lg border border-border/50 bg-surface text-text-secondary hover:text-text-primary transition-colors">
               <Bell className="h-4 w-4" />

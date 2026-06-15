@@ -17,58 +17,19 @@ import {
 } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
 import { Card3D, DepthLayer } from "@/components/effects/card-3d";
+import { useT } from "@/components/i18n/language-provider";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const features = [
-  {
-    icon: Users,
-    title: "Patient Management",
-    description:
-      "Comprehensive patient profiles with medical history, treatment plans, and secure document storage accessible from any device.",
-  },
-  {
-    icon: Calendar,
-    title: "Appointment Scheduling",
-    description:
-      "Intelligent calendar with drag-and-drop rescheduling, automated reminders, and real-time availability for your entire staff.",
-  },
-  {
-    icon: CreditCard,
-    title: "Billing & Payments",
-    description:
-      "Streamlined invoicing, insurance claim processing, and integrated payment gateway with support for multiple currencies.",
-  },
-  {
-    icon: Package,
-    title: "Inventory Control",
-    description:
-      "Real-time inventory tracking, automated reordering alerts, and expiry date management for medical supplies and equipment.",
-  },
-  {
-    icon: UsersRound,
-    title: "Staff Management",
-    description:
-      "Role-based access control, shift scheduling, performance analytics, and seamless team collaboration tools.",
-  },
-  {
-    icon: BarChart3,
-    title: "Reports & Analytics",
-    description:
-      "Visual dashboards with key metrics, customizable reports, and AI-powered insights to drive data-informed decisions.",
-  },
-  {
-    icon: Building2,
-    title: "Multi-Branch Support",
-    description:
-      "Centralized management across multiple locations with unified reporting, inventory, and patient data synchronization.",
-  },
-  {
-    icon: Cpu,
-    title: "ERP Integration",
-    description:
-      "Seamlessly connect with existing EHR systems, lab equipment, and third-party APIs through our open integration framework.",
-  },
+const featureItems = [
+  { icon: Users, key: "patientManagement" },
+  { icon: Calendar, key: "scheduling" },
+  { icon: CreditCard, key: "billing" },
+  { icon: Package, key: "inventory" },
+  { icon: UsersRound, key: "staff" },
+  { icon: BarChart3, key: "analytics" },
+  { icon: Building2, key: "multiBranch" },
+  { icon: Cpu, key: "integration" },
 ];
 
 const containerVariants = {
@@ -80,6 +41,7 @@ const containerVariants = {
 };
 
 export function Features() {
+  const t = useT();
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
@@ -122,9 +84,9 @@ export function Features() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          badge="Features"
-          title="Everything you need to run your clinic"
-          description="A comprehensive suite of tools designed specifically for healthcare practices. From patient intake to revenue tracking."
+          badge={t("features.badge")}
+          title={t("features.title")}
+          description={t("features.description")}
         />
 
         <motion.div
@@ -134,11 +96,13 @@ export function Features() {
           viewport={{ once: true, margin: "-80px" }}
           className="mt-16 sm:mt-20 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"
         >
-          {features.map((feature) => {
+          {featureItems.map((feature) => {
             const Icon = feature.icon;
+            const title = t(`features.items.${feature.key}.title`);
+            const description = t(`features.items.${feature.key}.description`);
             return (
               <motion.div
-                key={feature.title}
+                key={feature.key}
                 className="feature-card"
               >
                 <Card3D className="group relative rounded-2xl border border-border/50 bg-surface p-6 sm:p-7 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-500/10 hover:border-primary-200/50 cursor-default"
@@ -151,13 +115,13 @@ export function Features() {
 
                   <DepthLayer depth={1}>
                     <h3 className="text-base font-semibold text-text-primary mb-2 group-hover:text-primary-700 transition-colors">
-                      {feature.title}
+                      {title}
                     </h3>
                   </DepthLayer>
 
                   <DepthLayer depth={0.5}>
                     <p className="text-sm text-text-secondary leading-relaxed">
-                      {feature.description}
+                      {description}
                     </p>
                   </DepthLayer>
 

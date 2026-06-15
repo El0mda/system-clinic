@@ -8,10 +8,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ParticleField } from "@/components/effects/particle-field";
+import { useT } from "@/components/i18n/language-provider";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function CTAFinal() {
+  const t = useT();
   const sectionRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
@@ -82,7 +84,7 @@ export function CTAFinal() {
     return () => ctx.revert();
   }, []);
 
-  const headline = "Ready to transform your clinic operations?";
+  const headline = t("cta.headline");
   const words = headline.split(" ");
 
   return (
@@ -118,7 +120,7 @@ export function CTAFinal() {
           >
             <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 backdrop-blur-sm px-4 py-1.5 text-xs font-medium text-white border border-white/10 mb-6">
               <Sparkles className="w-3.5 h-3.5" />
-              Start your free trial today
+              {t("cta.badge")}
             </span>
           </motion.div>
 
@@ -136,8 +138,7 @@ export function CTAFinal() {
           </h2>
 
           <p className="mt-5 sm:mt-6 text-base sm:text-lg text-primary-100/80 max-w-lg mx-auto leading-relaxed">
-            Join 2,000+ clinics already using HealthERP. Start your free
-            14-day trial — no credit card required.
+            {t("cta.subtitle")}
           </p>
 
           <motion.div
@@ -153,8 +154,8 @@ export function CTAFinal() {
               className="bg-white text-primary-700 hover:bg-primary-50 shadow-2xl shadow-primary-900/30 h-13 px-8 text-base relative overflow-hidden group"
             >
               <span className="relative z-10 flex items-center gap-2">
-                Get Started Free
-                <ArrowRight className="h-4 w-4" />
+                {t("common.getStartedFree")}
+                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </span>
               <span className="absolute inset-0 bg-gradient-to-r from-primary-100 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </Button>
@@ -163,7 +164,7 @@ export function CTAFinal() {
               size="lg"
               className="text-white/80 hover:text-white hover:bg-white/10 border border-white/10 h-13 px-8 text-base"
             >
-              Talk to Sales
+              {t("common.talkToSales")}
             </Button>
           </motion.div>
 
@@ -174,7 +175,7 @@ export function CTAFinal() {
             transition={{ duration: 0.5, delay: 0.4 }}
             className="mt-6 text-xs text-primary-200/60"
           >
-            Free 14-day trial &bull; No credit card required &bull; Cancel anytime
+            {t("cta.footnote")}
           </motion.p>
         </motion.div>
       </div>

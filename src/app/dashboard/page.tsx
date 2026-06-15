@@ -9,8 +9,10 @@ import {
 } from "lucide-react";
 import { kpiCards, revenueData, activities, appointments } from "@/lib/dashboard-data";
 import { AnimatedNumber } from "@/components/ui/animated-number";
+import { useT } from "@/components/i18n/language-provider";
 
 const icons = { Users, Calendar, DollarSign, UsersRound };
+const kpiKeys = ["totalPatients", "appointments", "revenue", "activeStaff"];
 
 /* Per-metric accent palette so KPI cards read as distinct, scannable tiles. */
 const accents = [
@@ -21,6 +23,7 @@ const accents = [
 ];
 
 export default function DashboardHome() {
+  const t = useT();
   const kpisRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,19 +45,19 @@ export default function DashboardHome() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-text-primary">Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-text-primary">{t("dashboardHome.title")}</h1>
           <p className="text-sm text-text-secondary mt-1">
-            Welcome back — here&apos;s what&apos;s happening at your clinic today.
+            {t("dashboardHome.subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <button className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-border bg-surface text-sm font-medium text-text-secondary hover:text-text-primary hover:bg-surface-tertiary transition-colors">
             <Download className="h-4 w-4" />
-            <span className="hidden sm:inline">Export</span>
+            <span className="hidden sm:inline">{t("common.export")}</span>
           </button>
           <button className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-gradient-to-br from-primary-600 to-accent-600 text-sm font-medium text-white shadow-sm hover:shadow-md hover:from-primary-500 hover:to-accent-500 transition-all">
             <Plus className="h-4 w-4" />
-            <span>New Appointment</span>
+            <span>{t("dashboardHome.newAppointment")}</span>
           </button>
         </div>
       </div>
@@ -71,7 +74,7 @@ export default function DashboardHome() {
             >
               <span className={`absolute left-0 top-0 h-full w-1 ${accent.bar}`} />
               <div className="flex items-center justify-between mb-3">
-                <span className="text-sm text-text-secondary font-medium">{kpi.label}</span>
+                <span className="text-sm text-text-secondary font-medium">{t(`dashboardHome.kpis.${kpiKeys[i]}`, kpi.label)}</span>
                 <div className={`w-9 h-9 rounded-lg flex items-center justify-center ${accent.icon}`}>
                   <Icon className="w-[18px] h-[18px]" />
                 </div>
@@ -92,7 +95,7 @@ export default function DashboardHome() {
                   {kpi.trend === "up" ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
                   {kpi.change}%
                 </span>
-                <span className="text-xs text-text-tertiary">{kpi.changeLabel}</span>
+                <span className="text-xs text-text-tertiary">{t("dashboardHome.vsLastMonth")}</span>
               </div>
             </div>
           );
@@ -105,12 +108,12 @@ export default function DashboardHome() {
         <div className="lg:col-span-2 card-elevated rounded-xl border border-border bg-surface p-5 sm:p-6">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-5">
             <div>
-              <h3 className="text-base font-semibold text-text-primary">Revenue Overview</h3>
-              <p className="text-xs text-text-tertiary mt-0.5">Last 6 months · revenue vs expenses</p>
+              <h3 className="text-base font-semibold text-text-primary">{t("dashboardHome.revenueOverview")}</h3>
+              <p className="text-xs text-text-tertiary mt-0.5">{t("dashboardHome.revenueSubtitle")}</p>
             </div>
             <div className="flex items-center gap-4">
               <div className="text-right">
-                <p className="text-[11px] text-text-tertiary">Net profit</p>
+                <p className="text-[11px] text-text-tertiary">{t("dashboardHome.netProfit")}</p>
                 <p className="text-sm font-semibold text-text-primary">
                   ${(netProfit / 1000).toFixed(1)}k
                 </p>
@@ -164,11 +167,11 @@ export default function DashboardHome() {
 
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 mt-5 pt-4 border-t border-border text-xs text-text-tertiary">
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-t from-primary-600 to-primary-400" /> Revenue
+              <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-t from-primary-600 to-primary-400" /> {t("dashboardHome.revenue")}
               <span className="font-medium text-text-secondary">${(totalRevenue / 1000).toFixed(0)}k</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-sm bg-surface-tertiary border border-border" /> Expenses
+              <span className="w-2.5 h-2.5 rounded-sm bg-surface-tertiary border border-border" /> {t("dashboardHome.expenses")}
               <span className="font-medium text-text-secondary">${(totalExpenses / 1000).toFixed(0)}k</span>
             </span>
           </div>
@@ -177,7 +180,7 @@ export default function DashboardHome() {
         {/* Recent Activity */}
         <div className="card-elevated rounded-xl border border-border bg-surface p-5 sm:p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-base font-semibold text-text-primary">Recent Activity</h3>
+            <h3 className="text-base font-semibold text-text-primary">{t("dashboardHome.recentActivity")}</h3>
             <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
           </div>
           <div className="space-y-1">
@@ -204,20 +207,20 @@ export default function DashboardHome() {
       <div className="card-elevated rounded-xl border border-border bg-surface overflow-hidden">
         <div className="flex items-center justify-between p-5 sm:p-6 pb-4">
           <div>
-            <h3 className="text-base font-semibold text-text-primary">Today&apos;s Appointments</h3>
-            <p className="text-xs text-text-tertiary mt-0.5">{appointments.length} scheduled</p>
+            <h3 className="text-base font-semibold text-text-primary">{t("dashboardHome.todaysAppointments")}</h3>
+            <p className="text-xs text-text-tertiary mt-0.5">{appointments.length} {t("dashboardHome.scheduled")}</p>
           </div>
-          <a href="/dashboard/appointments" className="text-xs font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400">View all</a>
+          <a href="/dashboard/appointments" className="text-xs font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400">{t("common.viewAll")}</a>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-y border-border bg-surface-secondary/60">
-                <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 px-5 sm:px-6">Patient</th>
-                <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 pr-4">Service</th>
-                <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 pr-4">Time</th>
-                <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 pr-4">Doctor</th>
-                <th className="text-right text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 px-5 sm:px-6">Status</th>
+                <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 px-5 sm:px-6">{t("dashboardHome.cols.patient")}</th>
+                <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 pr-4">{t("dashboardHome.cols.service")}</th>
+                <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 pr-4">{t("dashboardHome.cols.time")}</th>
+                <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 pr-4">{t("dashboardHome.cols.doctor")}</th>
+                <th className="text-right text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 px-5 sm:px-6">{t("dashboardHome.cols.status")}</th>
               </tr>
             </thead>
             <tbody>
@@ -231,7 +234,7 @@ export default function DashboardHome() {
                       <span className="text-sm font-medium text-text-primary">{apt.patientName}</span>
                     </div>
                   </td>
-                  <td className="py-3 pr-4 text-sm text-text-secondary">{apt.service}</td>
+                  <td className="py-3 pr-4 text-sm text-text-secondary">{t(`enums.service.${apt.service}`, apt.service)}</td>
                   <td className="py-3 pr-4 text-sm text-text-secondary tabular-nums">{apt.time}</td>
                   <td className="py-3 pr-4 text-sm text-text-secondary">{apt.doctor}</td>
                   <td className="py-3 px-5 sm:px-6 text-right">
@@ -249,7 +252,7 @@ export default function DashboardHome() {
                         apt.status === "Cancelled" ? "bg-red-500" :
                         "bg-amber-500"
                       }`} />
-                      {apt.status}
+                      {t(`enums.status.${apt.status}`, apt.status)}
                     </span>
                   </td>
                 </tr>

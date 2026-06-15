@@ -11,45 +11,19 @@ import {
   BarChart3,
 } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
+import { useT } from "@/components/i18n/language-provider";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const steps = [
-  {
-    icon: Building2,
-    title: "Register Your Clinic",
-    description:
-      "Set up your clinic profile in minutes. Add your locations, services, staff, and operating hours.",
-    number: "01",
-    gradient: "from-primary-500 to-indigo-500",
-  },
-  {
-    icon: UserPlus,
-    title: "Add Patients",
-    description:
-      "Import existing patient records or add new ones. Store medical history, documents, and treatment plans securely.",
-    number: "02",
-    gradient: "from-emerald-500 to-teal-500",
-  },
-  {
-    icon: Calendar,
-    title: "Manage Appointments",
-    description:
-      "Schedule, reschedule, and track appointments with ease. Automated reminders keep everyone on time.",
-    number: "03",
-    gradient: "from-amber-500 to-orange-500",
-  },
-  {
-    icon: BarChart3,
-    title: "Track Revenue",
-    description:
-      "Monitor financial performance with real-time dashboards, billing insights, and revenue analytics.",
-    number: "04",
-    gradient: "from-violet-500 to-purple-500",
-  },
+const stepItems = [
+  { icon: Building2, key: "register", number: "01", gradient: "from-primary-500 to-indigo-500" },
+  { icon: UserPlus, key: "addPatients", number: "02", gradient: "from-emerald-500 to-teal-500" },
+  { icon: Calendar, key: "manageAppointments", number: "03", gradient: "from-amber-500 to-orange-500" },
+  { icon: BarChart3, key: "trackRevenue", number: "04", gradient: "from-violet-500 to-purple-500" },
 ];
 
 export function HowItWorks() {
+  const t = useT();
   const sectionRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const stepsRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -187,9 +161,9 @@ export function HowItWorks() {
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          badge="How It Works"
-          title="Get started in 4 simple steps"
-          description="From registration to full operation — get your clinic running on HealthERP within hours, not weeks."
+          badge={t("howItWorks.badge")}
+          title={t("howItWorks.title")}
+          description={t("howItWorks.description")}
         />
 
         <div className="mt-16 sm:mt-20 relative">
@@ -200,13 +174,15 @@ export function HowItWorks() {
           />
 
           <div className="space-y-12 sm:space-y-16 lg:space-y-24">
-            {steps.map((step, index) => {
+            {stepItems.map((step, index) => {
               const Icon = step.icon;
               const isEven = index % 2 === 0;
+              const title = t(`howItWorks.steps.${step.key}.title`);
+              const description = t(`howItWorks.steps.${step.key}.description`);
 
               return (
                 <div
-                  key={step.title}
+                  key={step.key}
                   ref={(el) => { stepsRef.current[index] = el; }}
                   className={`relative flex flex-col ${
                     isEven ? "lg:flex-row" : "lg:flex-row-reverse"
@@ -224,10 +200,10 @@ export function HowItWorks() {
                       }`}
                     >
                       <h3 className="text-xl sm:text-2xl font-semibold text-text-primary mb-3">
-                        {step.title}
+                        {title}
                       </h3>
                       <p className="text-sm sm:text-base text-text-secondary leading-relaxed">
-                        {step.description}
+                        {description}
                       </p>
                     </div>
                   </div>
@@ -241,7 +217,7 @@ export function HowItWorks() {
                       <Icon className="w-6 h-6" />
                     </div>
                     {/* Connecting line */}
-                    {index < steps.length - 1 && (
+                    {index < stepItems.length - 1 && (
                       <div
                         ref={(el) => { linesRef.current[index] = el; }}
                         className="w-0.5 h-16 bg-gradient-to-b from-primary-200 to-accent-200 origin-top"
@@ -273,7 +249,7 @@ export function HowItWorks() {
                     <span className="text-3xl font-bold text-primary-100">
                       {step.number}
                     </span>
-                    {index < steps.length - 1 && (
+                    {index < stepItems.length - 1 && (
                       <div className="flex-1 h-px bg-gradient-to-r from-primary-200 to-accent-200" />
                     )}
                   </div>

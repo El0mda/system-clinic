@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useT } from "@/components/i18n/language-provider";
 
 const logos = [
   "BrightSmile Dental",
@@ -14,6 +15,7 @@ const logos = [
 ];
 
 export function TrustedBy() {
+  const t = useT();
   return (
     <section className="relative py-16 sm:py-20 border-y border-border/30 bg-surface-secondary/30">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -24,7 +26,7 @@ export function TrustedBy() {
           transition={{ duration: 0.5 }}
           className="text-center text-xs sm:text-sm font-medium text-text-tertiary uppercase tracking-widest mb-8"
         >
-          Trusted by 2,000+ healthcare clinics worldwide
+          {t("trustedBy.title")}
         </motion.p>
 
         <div className="relative overflow-hidden">
