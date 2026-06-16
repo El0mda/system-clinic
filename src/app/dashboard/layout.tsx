@@ -5,29 +5,27 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import gsap from "gsap";
 import {
-  LayoutDashboard, Users, Calendar, FileText, Briefcase,
-  Package, UserCog, Settings, ChevronLeft, ChevronRight,
+  ChevronLeft, ChevronRight,
   Bell, LogOut, Menu, Search,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/dashboard/theme-toggle";
 import { LanguageToggle } from "@/components/i18n/language-toggle";
 import { useT } from "@/components/i18n/language-provider";
 import { useAuth } from "@/components/dashboard/auth-provider";
+import { getClinicConfig } from "@/lib/clinic-config";
 import { cn } from "@/lib/utils";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading, logout } = useAuth();
   const t = useT();
-  const navItems = [
-    { label: t("nav.dashboard"), href: "/dashboard", icon: LayoutDashboard },
-    { label: t("nav.patients"), href: "/dashboard/patients", icon: Users },
-    { label: t("nav.appointments"), href: "/dashboard/appointments", icon: Calendar },
-    { label: t("nav.invoices"), href: "/dashboard/invoices", icon: FileText },
-    { label: t("nav.services"), href: "/dashboard/services", icon: Briefcase },
-    { label: t("nav.inventory"), href: "/dashboard/inventory", icon: Package },
-    { label: t("nav.employees"), href: "/dashboard/employees", icon: UserCog },
-    { label: t("nav.settings"), href: "/dashboard/settings", icon: Settings },
-  ];
+  // The sidebar is driven by the business type chosen at sign-up: a Beauty
+  // Center sees clients + treatment plans, a clinic sees patients, and so on.
+  const config = getClinicConfig(user?.clinicType);
+  const navItems = config.nav.map((m) => ({
+    label: t(m.labelKey, m.fallback),
+    href: m.href,
+    icon: m.icon,
+  }));
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);

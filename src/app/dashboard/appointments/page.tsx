@@ -4,11 +4,11 @@ import { useState } from "react";
 import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
-import { appointments as initialAppointments, patients, employees } from "@/lib/dashboard-data";
+import { services } from "@/lib/dashboard-data";
 import type { Appointment } from "@/lib/dashboard-data";
 import { useLanguage } from "@/components/i18n/language-provider";
-
-const serviceOptions = ["Dental Cleaning", "Root Canal", "Teeth Whitening", "General Checkup", "Physiotherapy", "Facial Treatment", "Massage Therapy", "Skin Consultation"];
+import { useAuth } from "@/components/dashboard/auth-provider";
+import { getClinicConfig } from "@/lib/clinic-config";
 
 const statusColors: Record<string, string> = {
   Completed: "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400",
@@ -20,16 +20,29 @@ const statusColors: Record<string, string> = {
 
 export default function AppointmentsPage() {
   const { t, tArr, lang } = useLanguage();
+  const { user } = useAuth();
+  // Data, bookable service list and the provider label all follow the business
+  // type — a beauty center books specialists for beauty services.
+  const config = getClinicConfig(user?.clinicType);
+  const isBeauty = config.key === "beauty";
+  const clients = config.data.clients;
+  const providers = config.data.staff.filter((e) => config.providerRoles.includes(e.role));
+  const serviceOptions = services
+    .filter((s) => config.serviceCategories.includes(s.category))
+    .map((s) => s.name);
+  const providerLabel = isBeauty ? t("appointments.provider", "Specialist") : t("appointments.doctor");
+  const selectProviderLabel = isBeauty ? t("appointments.selectProvider", "Select specialist") : t("appointments.selectDoctor");
+
   const weekDays = tArr("enums.weekDays");
   const localeCode = lang === "ar" ? "ar-EG" : "en-US";
-  const [appointments, setAppointments] = useState<Appointment[]>(initialAppointments);
+  const [appointments, setAppointments] = useState<Appointment[]>(config.data.appointments);
   const [weekStart, setWeekStart] = useState(() => {
     const d = new Date();
     d.setDate(d.getDate() - d.getDay());
     return d;
   });
   const [modalOpen, setModalOpen] = useState(false);
-  const [form, setForm] = useState({ patientName: "", service: "Dental Cleaning", doctor: "", date: "", time: "", duration: "30" });
+  const [form, setForm] = useState({ patientName: "", service: serviceOptions[0] ?? "", doctor: "", date: "", time: "", duration: "30" });
 
   const dates = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(weekStart);
@@ -41,13 +54,13 @@ export default function AppointmentsPage() {
   const today = new Date().toDateString();
 
   const handleAdd = () => {
-    const patient = patients.find((p) => p.name === form.patientName);
+    const client = clients.find((p) => p.name === form.patientName);
     const newAppt: Appointment = {
       id: crypto.randomUUID(),
       patientName: form.patientName,
-      patientAvatar: patient?.avatar || form.patientName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2),
+      patientAvatar: client?.avatar || form.patientName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2),
       service: form.service,
-      doctor: form.doctor || "Dr. Williams",
+      doctor: form.doctor || providers[0]?.name || "",
       date: form.date || dates[0].toISOString().slice(0, 10),
       time: form.time || "09:00",
       duration: parseInt(form.duration) || 30,
@@ -55,7 +68,7 @@ export default function AppointmentsPage() {
     };
     setAppointments((prev) => [...prev, newAppt]);
     setModalOpen(false);
-    setForm({ patientName: "", service: "Dental Cleaning", doctor: "", date: "", time: "", duration: "30" });
+    setForm({ patientName: "", service: serviceOptions[0] ?? "", doctor: "", date: "", time: "", duration: "30" });
   };
 
   return (
@@ -133,11 +146,11 @@ export default function AppointmentsPage() {
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={t("appointments.newAppointment")}>
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-text-secondary mb-1.5">{t("appointments.patient")}</label>
+            <label className="block text-xs font-medium text-text-secondary mb-1.5">{isBeauty ? t("clients.colClient", "Client") : t("appointments.patient")}</label>
             <select value={form.patientName} onChange={(e) => setForm({ ...form, patientName: e.target.value })}
               className="w-full h-10 px-3 rounded-lg border border-border/60 bg-surface-secondary/50 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all appearance-none">
-              <option value="">{t("appointments.selectPatient")}</option>
-              {patients.map((p) => <option key={p.id} value={p.name}>{p.name}</option>)}
+              <option value="">{isBeauty ? t("clients.select", "Select client") : t("appointments.selectPatient")}</option>
+              {clients.map((p) => <option key={p.id} value={p.name}>{p.name}</option>)}
             </select>
           </div>
           <div>
@@ -148,12 +161,12 @@ export default function AppointmentsPage() {
             </select>
           </div>
           <div>
-            <label className="block text-xs font-medium text-text-secondary mb-1.5">{t("appointments.doctor")}</label>
+            <label className="block text-xs font-medium text-text-secondary mb-1.5">{providerLabel}</label>
             <select value={form.doctor} onChange={(e) => setForm({ ...form, doctor: e.target.value })}
               className="w-full h-10 px-3 rounded-lg border border-border/60 bg-surface-secondary/50 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all appearance-none">
-              <option value="">{t("appointments.selectDoctor")}</option>
-              {employees.filter((e) => e.role === "Doctor").map((doc) => (
-                <option key={doc.id} value={doc.name}>{doc.name}</option>
+              <option value="">{selectProviderLabel}</option>
+              {providers.map((p) => (
+                <option key={p.id} value={p.name}>{p.name}</option>
               ))}
             </select>
           </div>

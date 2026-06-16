@@ -79,7 +79,7 @@ export function Features() {
       ref={sectionRef}
       className="relative py-20 sm:py-28 lg:py-32 overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-primary-50/30 to-white pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-surface via-primary-50/30 to-surface dark:via-primary-900/10 pointer-events-none" />
       <div className="absolute top-1/3 left-0 w-72 h-72 bg-primary-300/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -108,7 +108,7 @@ export function Features() {
                 <Card3D className="group relative rounded-2xl border border-border/50 bg-surface p-6 sm:p-7 transition-all duration-500 hover:shadow-2xl hover:shadow-primary-500/10 hover:border-primary-200/50 cursor-default"
                 >
                   <DepthLayer depth={1.5}>
-                    <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-primary-50 to-accent-50 border border-primary-100/50 mb-4 group-hover:scale-110 group-hover:rotate-[5deg] transition-all duration-300">
+                    <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-primary-50 to-accent-50 dark:from-primary-900/30 dark:to-accent-700/20 border border-primary-100/50 dark:border-primary-800/50 mb-4 group-hover:scale-110 group-hover:rotate-[5deg] transition-all duration-300">
                       <Icon className="w-5 h-5 text-primary-600" />
                     </div>
                   </DepthLayer>

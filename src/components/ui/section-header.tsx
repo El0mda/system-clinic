@@ -37,7 +37,7 @@ export function SectionHeader({
           viewport={{ once: true }}
           transition={{ duration: 0.4, delay: 0.1 }}
         >
-          <span className="inline-flex items-center rounded-full bg-primary-50 px-3.5 py-1 text-xs font-medium text-primary-700 border border-primary-200 mb-4">
+          <span className="inline-flex items-center rounded-full bg-primary-50 dark:bg-primary-900/20 px-3.5 py-1 text-xs font-medium text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800 mb-4">
             {badge}
           </span>
         </motion.div>

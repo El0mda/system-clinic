@@ -7,16 +7,28 @@ import { Modal } from "@/components/ui/modal";
 import { services as initialServices } from "@/lib/dashboard-data";
 import type { Service } from "@/lib/dashboard-data";
 import { useT } from "@/components/i18n/language-provider";
-
-const categories = Array.from(new Set(initialServices.map((s) => s.category)));
+import { useAuth } from "@/components/dashboard/auth-provider";
+import { getClinicConfig } from "@/lib/clinic-config";
 
 export default function ServicesPage() {
   const t = useT();
-  const [services, setServices] = useState<Service[]>(initialServices);
+  const { user } = useAuth();
+  // The catalog follows the business type picked at sign-up. A Beauty Center
+  // is scoped to its beauty categories; other types keep the full catalog.
+  const config = getClinicConfig(user?.clinicType);
+  const isBeauty = config.key === "beauty";
+  const initial = isBeauty
+    ? initialServices.filter((s) => config.serviceCategories.includes(s.category))
+    : initialServices;
+  const categories = isBeauty
+    ? config.serviceCategories
+    : Array.from(new Set(initialServices.map((s) => s.category)));
+
+  const [services, setServices] = useState<Service[]>(initial);
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [modalOpen, setModalOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", category: "Dental", price: "", duration: "30" });
+  const [form, setForm] = useState({ name: "", category: config.defaultServiceCategory, price: "", duration: "30" });
 
   const filtered = services.filter((s) => {
     const matchesSearch = s.name.toLowerCase().includes(search.toLowerCase()) || s.category.toLowerCase().includes(search.toLowerCase());
@@ -36,7 +48,7 @@ export default function ServicesPage() {
     };
     setServices((prev) => [...prev, newService]);
     setModalOpen(false);
-    setForm({ name: "", category: "Dental", price: "", duration: "30" });
+    setForm({ name: "", category: config.defaultServiceCategory, price: "", duration: "30" });
   };
 
   return (

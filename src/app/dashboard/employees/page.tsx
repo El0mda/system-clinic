@@ -4,19 +4,26 @@ import { useState } from "react";
 import { Search, Plus, Mail, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
-import { employees as initialEmployees } from "@/lib/dashboard-data";
 import type { Employee } from "@/lib/dashboard-data";
 import { useT } from "@/components/i18n/language-provider";
-
-const roles = Array.from(new Set(initialEmployees.map((e) => e.role)));
+import { useAuth } from "@/components/dashboard/auth-provider";
+import { getClinicConfig } from "@/lib/clinic-config";
 
 export default function EmployeesPage() {
   const t = useT();
+  const { user } = useAuth();
+  // Staff and their roles follow the business type picked at sign-up — a beauty
+  // center has stylists and estheticians, a clinic has doctors and nurses.
+  const config = getClinicConfig(user?.clinicType);
+  const initialEmployees = config.data.staff;
+  const roles = Array.from(new Set(initialEmployees.map((e) => e.role)));
+  const defaultRole = roles[0] ?? "";
+
   const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
   const [search, setSearch] = useState("");
   const [activeRole, setActiveRole] = useState<string>("All");
   const [modalOpen, setModalOpen] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", phone: "", role: "Doctor", specialty: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", role: defaultRole, specialty: "" });
 
   const filtered = employees.filter((e) => {
     const matchesSearch = e.name.toLowerCase().includes(search.toLowerCase()) || e.specialty.toLowerCase().includes(search.toLowerCase());
@@ -37,7 +44,7 @@ export default function EmployeesPage() {
     };
     setEmployees((prev) => [...prev, newEmployee]);
     setModalOpen(false);
-    setForm({ name: "", email: "", phone: "", role: "Doctor", specialty: "" });
+    setForm({ name: "", email: "", phone: "", role: defaultRole, specialty: "" });
   };
 
   return (
@@ -97,7 +104,7 @@ export default function EmployeesPage() {
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-text-secondary mb-1.5">{t("employees.fullName")}</label>
-            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Dr. John Doe"
+            <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder={config.key === "beauty" ? "e.g. Nadia Karim" : "Dr. John Doe"}
               className="w-full h-10 px-3 rounded-lg border border-border/60 bg-surface-secondary/50 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all" />
           </div>
           <div className="grid grid-cols-2 gap-3">

@@ -4,16 +4,27 @@ import { useState } from "react";
 import { Search, Plus, Filter, MoreHorizontal, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
-import { patients as initialPatients } from "@/lib/dashboard-data";
 import type { Patient } from "@/lib/dashboard-data";
 import { useT } from "@/components/i18n/language-provider";
+import { useAuth } from "@/components/dashboard/auth-provider";
+import { getClinicConfig } from "@/lib/clinic-config";
 
 type GenderFilter = "All" | "Male" | "Female";
 type StatusFilter = "All" | "Active" | "Inactive" | "New";
 
 export default function PatientsPage() {
   const t = useT();
-  const [patients, setPatients] = useState<Patient[]>(initialPatients);
+  const { user } = useAuth();
+  // "Patients" for clinics, "Clients" for a beauty center.
+  const config = getClinicConfig(user?.clinicType);
+  const isBeauty = config.key === "beauty";
+  const title = isBeauty ? t("clients.title", "Clients") : t("patients.title");
+  const totalLabel = isBeauty ? t("clients.total", "total clients") : t("patients.totalPatients");
+  const addLabel = isBeauty ? t("clients.add", "Add Client") : t("patients.addPatient");
+  const searchLabel = isBeauty ? t("clients.searchPlaceholder", "Search clients...") : t("patients.searchPlaceholder");
+  const colLabel = isBeauty ? t("clients.colClient", "Client") : t("patients.cols.patient");
+
+  const [patients, setPatients] = useState<Patient[]>(config.data.clients);
   const [search, setSearch] = useState("");
   const [genderFilter, setGenderFilter] = useState<GenderFilter>("All");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
@@ -51,12 +62,12 @@ export default function PatientsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-semibold text-text-primary">{t("patients.title")}</h1>
-          <p className="text-sm text-text-secondary mt-1">{patients.length} {t("patients.totalPatients")}</p>
+          <h1 className="text-2xl sm:text-3xl font-semibold text-text-primary">{title}</h1>
+          <p className="text-sm text-text-secondary mt-1">{patients.length} {totalLabel}</p>
         </div>
         <Button variant="primary" size="md" onClick={() => setModalOpen(true)}>
           <Plus className="h-4 w-4" />
-          {t("patients.addPatient")}
+          {addLabel}
         </Button>
       </div>
 
@@ -66,7 +77,7 @@ export default function PatientsPage() {
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder={t("patients.searchPlaceholder")}
+            placeholder={searchLabel}
             className="w-full h-11 pl-10 pr-4 rtl:pl-4 rtl:pr-10 rounded-xl border border-border/60 bg-surface text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all"
           />
         </div>
@@ -110,7 +121,7 @@ export default function PatientsPage() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-border/30 bg-surface-secondary/50 dark:bg-surface-tertiary/30">
-                <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("patients.cols.patient")}</th>
+                <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{colLabel}</th>
                 <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("patients.cols.contact")}</th>
                 <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("patients.cols.gender")}</th>
                 <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("patients.cols.age")}</th>
@@ -159,7 +170,7 @@ export default function PatientsPage() {
         </div>
       </div>
 
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={t("patients.addPatient")}>
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={addLabel}>
         <div className="space-y-4">
           <div>
             <label className="block text-xs font-medium text-text-secondary mb-1.5">{t("patients.fullName")}</label>
@@ -197,7 +208,7 @@ export default function PatientsPage() {
           </div>
           <div className="flex justify-end gap-3 pt-2">
             <Button variant="outline" size="md" onClick={() => setModalOpen(false)}>{t("common.cancel")}</Button>
-            <Button variant="primary" size="md" onClick={handleAdd} disabled={!form.name || !form.email}>{t("patients.addPatient")}</Button>
+            <Button variant="primary" size="md" onClick={handleAdd} disabled={!form.name || !form.email}>{addLabel}</Button>
           </div>
         </div>
       </Modal>

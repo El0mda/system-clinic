@@ -91,7 +91,7 @@ export function Testimonials() {
       ref={sectionRef}
       className="relative py-20 sm:py-28 lg:py-32 overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-surface-secondary/30 to-white pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-surface via-surface-secondary/30 to-surface pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader

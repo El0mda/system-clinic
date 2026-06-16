@@ -147,6 +147,18 @@ export const services: Service[] = [
   { id: "6", name: "Facial Treatment", category: "Beauty", price: 180, duration: 45, active: true, clinicType: "Beauty" },
   { id: "7", name: "Massage Therapy", category: "Physiotherapy", price: 250, duration: 60, active: true, clinicType: "Physiotherapy" },
   { id: "8", name: "Skin Consultation", category: "Beauty", price: 100, duration: 30, active: true, clinicType: "Beauty" },
+  // Beauty Center catalog (shown when the business type is Beauty)
+  { id: "b1", name: "Haircut & Styling", category: "Hair", price: 60, duration: 45, active: true, clinicType: "Beauty" },
+  { id: "b2", name: "Hair Coloring", category: "Hair", price: 140, duration: 90, active: true, clinicType: "Beauty" },
+  { id: "b3", name: "Deep Cleansing Facial", category: "Skin", price: 120, duration: 60, active: true, clinicType: "Beauty" },
+  { id: "b4", name: "Skin Analysis", category: "Skin", price: 80, duration: 30, active: true, clinicType: "Beauty" },
+  { id: "b5", name: "Manicure & Pedicure", category: "Nails", price: 55, duration: 60, active: true, clinicType: "Beauty" },
+  { id: "b6", name: "Gel Nail Extensions", category: "Nails", price: 75, duration: 75, active: true, clinicType: "Beauty" },
+  { id: "b7", name: "Spa Day Package", category: "Spa", price: 220, duration: 120, active: true, clinicType: "Beauty" },
+  { id: "b8", name: "Relaxation Massage", category: "Massage", price: 110, duration: 60, active: true, clinicType: "Beauty" },
+  { id: "b9", name: "Laser Hair Removal", category: "Laser", price: 180, duration: 45, active: true, clinicType: "Beauty" },
+  { id: "b10", name: "Bridal Makeup", category: "Makeup", price: 250, duration: 90, active: true, clinicType: "Beauty" },
+  { id: "b11", name: "Body Wrap Treatment", category: "Body Treatments", price: 160, duration: 75, active: true, clinicType: "Beauty" },
 ];
 
 export const products: Product[] = [
@@ -185,4 +197,71 @@ export const revenueData: RevenueEntry[] = [
   { month: "Apr", revenue: 42000, expenses: 22000 },
   { month: "May", revenue: 45000, expenses: 23000 },
   { month: "Jun", revenue: 48250, expenses: 24500 },
+];
+
+/* -------------------------------------------------------------------------- */
+/* Beauty Center data set                                                     */
+/* A beauty center staffs stylists, estheticians and therapists — not doctors */
+/* — and serves "clients", not "patients". These data sets are surfaced when  */
+/* the business type chosen at sign-up is "Beauty Center".                    */
+/* -------------------------------------------------------------------------- */
+
+export const beautyStaff: Employee[] = [
+  { id: "bs1", name: "Nadia Karim", email: "nadia@beauty.com", phone: "+1 (555) 201-3001", role: "Stylist", specialty: "Hair Styling", status: "Active", avatar: "NK" },
+  { id: "bs2", name: "Yara Saleh", email: "yara@beauty.com", phone: "+1 (555) 201-3002", role: "Esthetician", specialty: "Skin Care", status: "Active", avatar: "YS" },
+  { id: "bs3", name: "Hana Mansour", email: "hana@beauty.com", phone: "+1 (555) 201-3003", role: "Nail Technician", specialty: "Nail Art", status: "Active", avatar: "HM" },
+  { id: "bs4", name: "Omar Fadel", email: "omar@beauty.com", phone: "+1 (555) 201-3004", role: "Massage Therapist", specialty: "Body Massage", status: "Active", avatar: "OF" },
+  { id: "bs5", name: "Reem Adib", email: "reem@beauty.com", phone: "+1 (555) 201-3005", role: "Laser Technician", specialty: "Laser Treatments", status: "Active", avatar: "RA" },
+  { id: "bs6", name: "Farida Nabil", email: "farida@beauty.com", phone: "+1 (555) 201-3006", role: "Makeup Artist", specialty: "Bridal Makeup", status: "On Leave", avatar: "FN" },
+  { id: "bs7", name: "Lina Habib", email: "lina@beauty.com", phone: "+1 (555) 201-3007", role: "Receptionist", specialty: "Front Desk", status: "Active", avatar: "LH" },
+  { id: "bs8", name: "Tariq Aziz", email: "tariq@beauty.com", phone: "+1 (555) 201-3008", role: "Manager", specialty: "Management", status: "Active", avatar: "TA" },
+];
+
+export const beautyClients: Patient[] = [
+  { id: "1", name: "Layla Hassan", email: "layla.h@email.com", phone: "+1 (555) 401-1001", gender: "Female", age: 29, lastVisit: "2026-06-12", status: "Active", avatar: "LH" },
+  { id: "2", name: "Mona Adel", email: "mona.a@email.com", phone: "+1 (555) 401-1002", gender: "Female", age: 35, lastVisit: "2026-06-11", status: "Active", avatar: "MA" },
+  { id: "3", name: "Sara Khaled", email: "sara.k@email.com", phone: "+1 (555) 401-1003", gender: "Female", age: 31, lastVisit: "2026-06-09", status: "New", avatar: "SK" },
+  { id: "4", name: "Nour Ibrahim", email: "nour.i@email.com", phone: "+1 (555) 401-1004", gender: "Female", age: 27, lastVisit: "2026-06-07", status: "Active", avatar: "NI" },
+  { id: "5", name: "Dina Tarek", email: "dina.t@email.com", phone: "+1 (555) 401-1005", gender: "Female", age: 42, lastVisit: "2026-05-30", status: "Inactive", avatar: "DT" },
+  { id: "6", name: "Huda Samir", email: "huda.s@email.com", phone: "+1 (555) 401-1006", gender: "Female", age: 38, lastVisit: "2026-06-06", status: "Active", avatar: "HS" },
+  { id: "7", name: "Karim Wael", email: "karim.w@email.com", phone: "+1 (555) 401-1007", gender: "Male", age: 33, lastVisit: "2026-06-04", status: "New", avatar: "KW" },
+  { id: "8", name: "Salma Riad", email: "salma.r@email.com", phone: "+1 (555) 401-1008", gender: "Female", age: 24, lastVisit: "2026-06-02", status: "Active", avatar: "SR" },
+];
+
+export const beautyAppointments: Appointment[] = [
+  { id: "1", patientName: "Layla Hassan", patientAvatar: "LH", service: "Deep Cleansing Facial", doctor: "Yara Saleh", date: "2026-06-15", time: "09:00", duration: 60, status: "Confirmed" },
+  { id: "2", patientName: "Mona Adel", patientAvatar: "MA", service: "Laser Hair Removal", doctor: "Reem Adib", date: "2026-06-15", time: "10:30", duration: 45, status: "In Progress" },
+  { id: "3", patientName: "Sara Khaled", patientAvatar: "SK", service: "Bridal Makeup", doctor: "Farida Nabil", date: "2026-06-15", time: "11:45", duration: 90, status: "Confirmed" },
+  { id: "4", patientName: "Nour Ibrahim", patientAvatar: "NI", service: "Relaxation Massage", doctor: "Omar Fadel", date: "2026-06-15", time: "14:00", duration: 60, status: "Completed" },
+  { id: "5", patientName: "Dina Tarek", patientAvatar: "DT", service: "Hair Coloring", doctor: "Nadia Karim", date: "2026-06-16", time: "09:30", duration: 90, status: "Confirmed" },
+  { id: "6", patientName: "Huda Samir", patientAvatar: "HS", service: "Manicure & Pedicure", doctor: "Hana Mansour", date: "2026-06-16", time: "11:00", duration: 60, status: "Pending" },
+  { id: "7", patientName: "Salma Riad", patientAvatar: "SR", service: "Haircut & Styling", doctor: "Nadia Karim", date: "2026-06-16", time: "15:30", duration: 45, status: "Confirmed" },
+  { id: "8", patientName: "Karim Wael", patientAvatar: "KW", service: "Body Wrap Treatment", doctor: "Omar Fadel", date: "2026-06-17", time: "10:00", duration: 75, status: "Completed" },
+];
+
+export const beautyInvoices: Invoice[] = [
+  { id: "1", number: "INV-2026-101", patientName: "Layla Hassan", patientAvatar: "LH", amount: 120, paid: 120, due: 0, date: "2026-06-12", status: "Paid" },
+  { id: "2", number: "INV-2026-102", patientName: "Mona Adel", patientAvatar: "MA", amount: 540, paid: 270, due: 270, date: "2026-06-11", status: "Partially Paid" },
+  { id: "3", number: "INV-2026-103", patientName: "Sara Khaled", patientAvatar: "SK", amount: 250, paid: 0, due: 250, date: "2026-06-09", status: "Pending" },
+  { id: "4", number: "INV-2026-104", patientName: "Nour Ibrahim", patientAvatar: "NI", amount: 110, paid: 110, due: 0, date: "2026-06-07", status: "Paid" },
+  { id: "5", number: "INV-2026-105", patientName: "Dina Tarek", patientAvatar: "DT", amount: 280, paid: 0, due: 280, date: "2026-05-30", status: "Overdue" },
+  { id: "6", number: "INV-2026-106", patientName: "Huda Samir", patientAvatar: "HS", amount: 130, paid: 130, due: 0, date: "2026-06-06", status: "Paid" },
+  { id: "7", number: "INV-2026-107", patientName: "Salma Riad", patientAvatar: "SR", amount: 60, paid: 60, due: 0, date: "2026-06-02", status: "Paid" },
+  { id: "8", number: "INV-2026-108", patientName: "Karim Wael", patientAvatar: "KW", amount: 160, paid: 80, due: 80, date: "2026-06-04", status: "Partially Paid" },
+];
+
+export const beautyKpiCards: KpiCard[] = [
+  { label: "Total Clients", value: "1,284", change: 9.4, changeLabel: "vs last month", icon: "Users", trend: "up" },
+  { label: "Appointments", value: "132", change: 6.7, changeLabel: "vs last month", icon: "Calendar", trend: "up" },
+  { label: "Revenue", value: "$36,900", change: 18.2, changeLabel: "vs last month", icon: "DollarSign", trend: "up" },
+  { label: "Active Staff", value: "18", change: 1.5, changeLabel: "vs last month", icon: "UsersRound", trend: "up" },
+];
+
+export const beautyActivities: Activity[] = [
+  { id: "1", user: "Layla Hassan", action: "checked in for", target: "Deep Cleansing Facial", time: "5 min ago", avatar: "LH" },
+  { id: "2", user: "Farida Nabil", action: "completed", target: "Bridal Makeup", time: "15 min ago", avatar: "FN" },
+  { id: "3", user: "Nour Ibrahim", action: "booked", target: "Relaxation Massage", time: "30 min ago", avatar: "NI" },
+  { id: "4", user: "Dina Tarek", action: "paid invoice", target: "INV-2026-105", time: "1 hour ago", avatar: "DT" },
+  { id: "5", user: "Reem Adib", action: "updated treatment plan for", target: "Mona Adel", time: "2 hours ago", avatar: "RA" },
+  { id: "6", user: "Lina Habib", action: "registered new client", target: "Salma Riad", time: "3 hours ago", avatar: "LH" },
 ];

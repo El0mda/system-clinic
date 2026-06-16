@@ -4,15 +4,24 @@ import { useState } from "react";
 import { Search, Plus, Filter, Download, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
-import { invoices as initialInvoices, patients } from "@/lib/dashboard-data";
 import type { Invoice } from "@/lib/dashboard-data";
 import { useT } from "@/components/i18n/language-provider";
+import { useAuth } from "@/components/dashboard/auth-provider";
+import { getClinicConfig } from "@/lib/clinic-config";
 
 type StatusFilter = "All" | "Paid" | "Partially Paid" | "Overdue" | "Pending" | "Cancelled";
 
 export default function InvoicesPage() {
   const t = useT();
-  const [invoices, setInvoices] = useState<Invoice[]>(initialInvoices);
+  const { user } = useAuth();
+  const config = getClinicConfig(user?.clinicType);
+  const isBeauty = config.key === "beauty";
+  const clients = config.data.clients;
+  const clientCol = isBeauty ? t("clients.colClient", "Client") : t("invoices.cols.patient");
+  const clientLabel = isBeauty ? t("clients.colClient", "Client") : t("invoices.patient");
+  const selectClientLabel = isBeauty ? t("clients.select", "Select client") : t("invoices.selectPatient");
+
+  const [invoices, setInvoices] = useState<Invoice[]>(config.data.invoices);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
   const [showFilters, setShowFilters] = useState(false);
@@ -30,7 +39,7 @@ export default function InvoicesPage() {
   const totalDue = invoices.reduce((s, i) => s + i.due, 0);
 
   const handleAdd = () => {
-    const patient = patients.find((p) => p.name === form.patientName);
+    const patient = clients.find((p) => p.name === form.patientName);
     const amount = parseFloat(form.amount) || 0;
     const newInv: Invoice = {
       id: crypto.randomUUID(),
@@ -111,7 +120,7 @@ export default function InvoicesPage() {
             <thead>
               <tr className="border-b border-border/30 bg-surface-secondary/50 dark:bg-surface-tertiary/30">
                 <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("invoices.cols.invoice")}</th>
-                <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("invoices.cols.patient")}</th>
+                <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{clientCol}</th>
                 <th className="text-left text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("invoices.cols.date")}</th>
                 <th className="text-right text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("invoices.cols.amount")}</th>
                 <th className="text-right text-xs font-semibold text-text-tertiary uppercase tracking-wider px-4 py-3">{t("invoices.cols.paid")}</th>
@@ -158,11 +167,11 @@ export default function InvoicesPage() {
       <Modal open={modalOpen} onClose={() => setModalOpen(false)} title={t("invoices.createInvoice")}>
         <div className="space-y-4">
           <div>
-            <label className="block text-xs font-medium text-text-secondary mb-1.5">{t("invoices.patient")}</label>
+            <label className="block text-xs font-medium text-text-secondary mb-1.5">{clientLabel}</label>
             <select value={form.patientName} onChange={(e) => setForm({ ...form, patientName: e.target.value })}
               className="w-full h-10 px-3 rounded-lg border border-border/60 bg-surface-secondary/50 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-400 transition-all appearance-none">
-              <option value="">{t("invoices.selectPatient")}</option>
-              {patients.map((p) => <option key={p.id} value={p.name}>{p.name}</option>)}
+              <option value="">{selectClientLabel}</option>
+              {clients.map((p) => <option key={p.id} value={p.name}>{p.name}</option>)}
             </select>
           </div>
           <div>

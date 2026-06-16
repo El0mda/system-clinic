@@ -72,7 +72,7 @@ export function Pricing() {
       ref={sectionRef}
       className="relative py-20 sm:py-28 lg:py-32 overflow-hidden"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-primary-50/20 to-white pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-surface via-primary-50/20 to-surface dark:via-primary-900/10 pointer-events-none" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-primary-300/10 to-accent-300/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

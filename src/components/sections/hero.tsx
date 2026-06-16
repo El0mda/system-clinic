@@ -104,7 +104,7 @@ export function Hero() {
       style={{ perspective: "1200px" }}
     >
       {/* Background gradients */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary-50/60 via-white to-white pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-primary-50/60 via-surface to-surface dark:from-primary-900/20 dark:via-surface dark:to-surface pointer-events-none" />
       <motion.div
         style={{ y: useTransform(scrollYProgress, [0, 1], [0, -200]) }}
         className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-primary-300/20 to-transparent rounded-full blur-3xl pointer-events-none"
@@ -189,7 +189,7 @@ export function Hero() {
                     {[1, 2, 3, 4].map((i) => (
                       <div
                         key={i}
-                        className="w-6 h-6 rounded-full border-2 border-white bg-gradient-to-br from-primary-300 to-accent-300"
+                        className="w-6 h-6 rounded-full border-2 border-surface bg-gradient-to-br from-primary-300 to-accent-300"
                       />
                     ))}
                   </span>

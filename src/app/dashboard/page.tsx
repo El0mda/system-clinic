@@ -7,12 +7,13 @@ import {
   ArrowUp, ArrowDown, Users, Calendar, DollarSign, UsersRound,
   Activity, Plus, Download, TrendingUp,
 } from "lucide-react";
-import { kpiCards, revenueData, activities, appointments } from "@/lib/dashboard-data";
+import { revenueData } from "@/lib/dashboard-data";
 import { AnimatedNumber } from "@/components/ui/animated-number";
 import { useT } from "@/components/i18n/language-provider";
+import { useAuth } from "@/components/dashboard/auth-provider";
+import { getClinicConfig } from "@/lib/clinic-config";
 
 const icons = { Users, Calendar, DollarSign, UsersRound };
-const kpiKeys = ["totalPatients", "appointments", "revenue", "activeStaff"];
 
 /* Per-metric accent palette so KPI cards read as distinct, scannable tiles. */
 const accents = [
@@ -24,6 +25,17 @@ const accents = [
 
 export default function DashboardHome() {
   const t = useT();
+  const { user } = useAuth();
+  // Headline metrics, activity feed and today's bookings reflect the business
+  // type chosen at sign-up.
+  const config = getClinicConfig(user?.clinicType);
+  const isBeauty = config.key === "beauty";
+  const { kpiCards, activities, appointments } = config.data;
+  const kpiKeys = isBeauty
+    ? ["totalClients", "appointments", "revenue", "activeStaff"]
+    : ["totalPatients", "appointments", "revenue", "activeStaff"];
+  const providerCol = isBeauty ? t("appointments.provider", "Specialist") : t("dashboardHome.cols.doctor");
+  const clientCol = isBeauty ? t("clients.colClient", "Client") : t("dashboardHome.cols.patient");
   const kpisRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -216,10 +228,10 @@ export default function DashboardHome() {
           <table className="w-full">
             <thead>
               <tr className="border-y border-border bg-surface-secondary/60">
-                <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 px-5 sm:px-6">{t("dashboardHome.cols.patient")}</th>
+                <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 px-5 sm:px-6">{clientCol}</th>
                 <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 pr-4">{t("dashboardHome.cols.service")}</th>
                 <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 pr-4">{t("dashboardHome.cols.time")}</th>
-                <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 pr-4">{t("dashboardHome.cols.doctor")}</th>
+                <th className="text-left text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 pr-4">{providerCol}</th>
                 <th className="text-right text-[11px] font-semibold text-text-tertiary uppercase tracking-wider py-2.5 px-5 sm:px-6">{t("dashboardHome.cols.status")}</th>
               </tr>
             </thead>

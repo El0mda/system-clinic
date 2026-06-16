@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageToggle } from "@/components/i18n/language-toggle";
+import { ThemeToggle } from "@/components/dashboard/theme-toggle";
 import { useT } from "@/components/i18n/language-provider";
 import { cn } from "@/lib/utils";
 
@@ -134,6 +135,7 @@ export function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
+          <ThemeToggle />
           <LanguageToggle />
           <Button variant="ghost" size="sm" onClick={() => router.push("/login")}>
             {t("common.login")}
@@ -145,6 +147,7 @@ export function Navbar() {
 
         {/* Mobile controls */}
         <div className="md:hidden flex items-center gap-2">
+          <ThemeToggle />
           <LanguageToggle />
           <button
             onClick={() => setIsOpen(!isOpen)}
